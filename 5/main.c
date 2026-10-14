@@ -6,14 +6,12 @@
 #include <string.h>
 #include <complex.h>
 
-// Частоты для разных режимов
 #define TX_FREQUENCY 800e6
 #define RX_FREQUENCY 840e6
 #define SAMPLE_RATE  1e6
 
 int main(int argc, char *argv[])
 {
-    // --- Проверка аргумента командной строки ---
     if (argc < 2)
     {
         printf("Usage: %s [tx|rx]\n", argv[0]);
@@ -39,7 +37,6 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
-    // ==================== ОБЩАЯ ИНИЦИАЛИЗАЦИЯ ====================
     SoapySDRKwargs args = {};
     SoapySDRKwargs_set(&args, "driver", "plutosdr");
 
@@ -61,11 +58,9 @@ int main(int argc, char *argv[])
         return EXIT_FAILURE;
     }
 
-    // Направление: TX или RX
     int direction = is_tx ? SOAPY_SDR_TX : SOAPY_SDR_RX;
     double freq   = is_tx ? TX_FREQUENCY : RX_FREQUENCY;
 
-    // Настройка частоты и sample rate
     if (SoapySDRDevice_setSampleRate(sdr, direction, 0, SAMPLE_RATE) != 0)
     {
         printf("setSampleRate fail: %s\n", SoapySDRDevice_lastError());
@@ -76,14 +71,12 @@ int main(int argc, char *argv[])
     }
     printf("Frequency: %lf Hz\n", SoapySDRDevice_getFrequency(sdr, direction, 0));
 
-    // Усиление: для TX тише, для RX громче
     double gain_val = is_tx ? -10.0 : 40.0;
     if (SoapySDRDevice_setGain(sdr, direction, 0, gain_val) != 0)
     {
         printf("setGain fail: %s\n", SoapySDRDevice_lastError());
     }
 
-    // Создание потока
     size_t channels[] = {0};
     size_t channel_count = sizeof(channels) / sizeof(channels[0]);
 
@@ -103,7 +96,6 @@ int main(int argc, char *argv[])
 
     const long timeoutUs = 400000;
 
-    // ==================== РЕЖИМ ПЕРЕДАТЧИКА ====================
     if (is_tx)
     {
         // Буфер с тестовым сигналом (ступенчатая амплитуда)
@@ -123,7 +115,6 @@ int main(int argc, char *argv[])
             tx_buff[i + 1] = amp; // Q
         }
 
-        // Маркеры начала/конца кадра
         tx_buff[0] = 0x7fff;
         tx_buff[1] = 0x7fff;
 
@@ -152,7 +143,6 @@ int main(int argc, char *argv[])
 
         printf("Stopping transmission...\n");
     }
-    // ==================== РЕЖИМ ПРИЁМНИКА ====================
     else
     {
         int16_t *rx_buffer = (int16_t *)malloc(2 * mtu * sizeof(int16_t));
@@ -221,7 +211,6 @@ int main(int argc, char *argv[])
         free(rx_buffer);
     }
 
-    // ==================== ЗАВЕРШЕНИЕ ====================
     SoapySDRDevice_deactivateStream(sdr, stream, 0, 0);
     SoapySDRDevice_closeStream(sdr, stream);
     SoapySDRDevice_unmake(sdr);
