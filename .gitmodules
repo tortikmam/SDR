@@ -1,0 +1,3 @@
+[submodule "libs/SoapySDR"]
+	path = libs/SoapySDR
+	url = https://github.com/TelecomDep/SoapySDR.git
