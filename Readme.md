@@ -10,7 +10,7 @@
 
 ### Папка project
 - Тут лежит основной проект: главный скрипт main.c, Cmake файл, python скрипт для отрисовки графиков и скрипт для компиляции проекта
-- Так же в папках WeekOne и WeekTwo реализованы программы для GN Radio
+- Так же в папках WeekOne и WeekTwo реализованы программы для GNU Radio
 
 ### Инструкция по установке и компиляции
 - Склонируйте репозиторий с флагом "--recursive" git clone --recursive https://github.com/tortikmam/SDR.git
