@@ -1,6 +1,6 @@
 
-#include <SoapySDR/Device.h>
-#include <SoapySDR/Formats.h>
+#include "../libs/SoapySDR/include/SoapySDR/Device.h"
+#include "../libs/SoapySDR/include/SoapySDR/Formats.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
