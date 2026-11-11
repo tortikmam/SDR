@@ -4,3 +4,6 @@
 [submodule "libs/libiio"]
 	path = libs/libiio
 	url = https://github.com/TelecomDep/libiio.git
+[submodule "libs/libad9361-iio"]
+	path = libs/libad9361-iio
+	url = https://github.com/TelecomDep/libad9361-iio.git
