@@ -7,3 +7,7 @@
 [submodule "libs/libad9361-iio"]
 	path = libs/libad9361-iio
 	url = https://github.com/TelecomDep/libad9361-iio.git
+[submodule "libs/SoapyPlutoSDR"]
+	path = libs/SoapyPlutoSDR
+	url = https://github.com/TelecomDep/SoapyPlutoSDR.git
+	branch = sdr_gadget_timestamping
