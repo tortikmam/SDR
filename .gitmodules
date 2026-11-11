@@ -1,3 +1,6 @@
 [submodule "libs/SoapySDR"]
 	path = libs/SoapySDR
 	url = https://github.com/TelecomDep/SoapySDR.git
+[submodule "libs/libiio"]
+	path = libs/libiio
+	url = https://github.com/TelecomDep/libiio.git
