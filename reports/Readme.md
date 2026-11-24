@@ -77,3 +77,15 @@
 - Так же видоизменился график сигнала:
 
 ![График измененного сигнала](weekSixEleven/signals.jpg)
+
+
+### Неделя 11 - Добавление ImGui
+- Добавили ImGui
+
+- Интерфейс RX:
+
+![intRx](weekEleven/rx.png)
+
+- Интерфейс TX:
+
+![intRx](weekEleven/tx.png)
