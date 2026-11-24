@@ -68,12 +68,12 @@
 
 Общий вид созвездий:
 
-![График созвездия](weekSixEleven/stars.png)
+![График созвездия](weekSixEleven/stars.jpg)
 
 Приближенное:
 
-![График увеличенного созвездия](weekSixEleven/starsMin.png)
+![График увеличенного созвездия](weekSixEleven/starsMin.jpg)
 
 - Так же видоизменился график сигнала:
 
-![График измененного сигнала](weekSixEleven/signals.png)
+![График измененного сигнала](weekSixEleven/signals.jpg)
