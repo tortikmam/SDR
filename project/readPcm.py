@@ -1,7 +1,4 @@
-# Просмотр BPSK: что отправили и что приняли.
-# Запуск из папки build:
-#   python3 bpsk_view.py                          # tx_sent.pcm -> rx_recv.pcm (800 МГц)
-#   python3 bpsk_view.py rx_sent.pcm tx_recv.pcm  # обратное направление (840 МГц)
+
 import os
 import sys
 import numpy as np
@@ -11,9 +8,9 @@ from scipy import signal
 SENT_FILE = sys.argv[1] if len(sys.argv) > 1 else "build/rx_recv.pcm"
 RECV_FILE = sys.argv[2] if len(sys.argv) > 2 else "build/rx_recv.pcm"
 SAMPLE_RATE = 1e6
-SHOW = 50000   # сколько отсчетов показать во времени (1.5 мс)
-BLOCK = 1920  # размер буфера в C-коде
-SPS = 10      # отсчетов на символ (как в main.c)
+SHOW = 50000   # отсчетов во времени
+BLOCK = 1920  
+SPS = 10      # отсчетов на символ 
 EST_LEN = 50000  # сколько отсчетов брать для оценки сдвига частоты
 
 
@@ -38,7 +35,6 @@ rx_i, rx_q = read_iq(RECV_FILE)
 
 rx = rx_i + 1j * rx_q
 
-# Самый сильный участок приема (в начале другая плата могла еще не передавать)
 n_blocks = max(len(rx) // BLOCK, 1)
 power = [np.mean(np.abs(rx[k * BLOCK:(k + 1) * BLOCK]) ** 2) for k in range(n_blocks)]
 start = int(np.argmax(power)) * BLOCK
@@ -58,7 +54,6 @@ for n in range(len_y):
 
 y = np.asarray(y)
 
-# --- ГРАФИК 1: Исходный входной I/Q ---
 plt.figure(figsize=(6, 6))
 plt.scatter(rx_i[seg], rx_q[seg], color="blue", alpha=0.6, label="I/Q")
 plt.title("I/Q Созвездие (до фильтра)")
@@ -70,7 +65,6 @@ plt.grid(True)
 plt.legend(loc="upper right")
 plt.tight_layout()
 
-# --- ГРАФИК 2: После согласованного фильтра (все отсчеты) ---
 plt.figure(figsize=(6, 6))
 plt.scatter(y[seg].real, y[seg].imag, color="blue", alpha=0.6, label="Filtered I/Q")
 plt.title("I/Q Созвездие (после свертки)")
@@ -82,7 +76,6 @@ plt.grid(True)
 plt.legend(loc="upper right")
 plt.tight_layout()
 
-# --- 10 ГРАФИКОВ
 y_eval = y[start : start + SHOW]
 
 fig, axes = plt.subplots(2, 5, figsize=(18, 7), sharex=True, sharey=True)
@@ -111,22 +104,18 @@ e_mean = [0.0] * SPS
 x = y_eval.real
 y_iq = y_eval.imag
 
-# Сколько символов берем для усреднения (например, 2000)
 num_symbols = 2000
 
 e = []
 
-# Перебираем 10 фаз стробирования (tau_hat от 0 до 9)
 for phase in range(SPS):
     errors = []
     for k in range(1, num_symbols):
         err = gardner_ted(x, y_iq, k,SPS, phase)
         errors.append(err)
     
-    # Средняя ошибка для текущей фазы
     e.append(np.mean(errors))
 
-# --- График S-кривой ---
 plt.figure(figsize=(7, 5))
 plt.plot(range(SPS), e, marker="o", color="blue")
 plt.title("Ошибка Гарднера от фазы стробирования")
